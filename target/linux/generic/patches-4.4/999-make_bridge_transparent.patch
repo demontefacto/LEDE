@@ -1,0 +1,36 @@
+--- a/net/bridge/br_input.c
++++ b/net/bridge/br_input.c
+@@ -281,6 +281,10 @@ rx_handler_result_t br_handle_frame(stru
+ 			break;
+ 
+ 		case 0x01:	/* IEEE MAC (Pause) */
++		        fwd_mask |= p->br->group_fwd_mask;
++		        if (fwd_mask & (1u << dest[5]))
++		                goto forward;
++                        else
+ 			goto drop;
+ 
+ 		default:
+--- a/net/bridge/br_private.h
++++ b/net/bridge/br_private.h
+@@ -34,8 +34,6 @@
+ 
+ /* Control of forwarding link local multicast */
+ #define BR_GROUPFWD_DEFAULT	0
+-/* Don't allow forwarding of control protocols like STP, MAC PAUSE and LACP */
+-#define BR_GROUPFWD_RESTRICTED	0x0007u
+ /* The Nearest Customer Bridge Group Address, 01-80-C2-00-00-[00,0B,0C,0D,0F] */
+ #define BR_GROUPFWD_8021AD	0xB801u
+ 
+--- a/net/bridge/br_sysfs_br.c
++++ b/net/bridge/br_sysfs_br.c
+@@ -178,9 +178,6 @@ static ssize_t group_fwd_mask_store(stru
+ 	if (endp == buf)
+ 		return -EINVAL;
+ 
+-	if (val & BR_GROUPFWD_RESTRICTED)
+-		return -EINVAL;
+-
+ 	br->group_fwd_mask = val;
+ 
+ 	return len;
