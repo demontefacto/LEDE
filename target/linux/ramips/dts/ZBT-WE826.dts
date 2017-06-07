@@ -83,7 +83,7 @@
 
 		partition@50000 {
 			label = "firmware";
-			reg = <0x50000 0x1F60000>;
+			reg = <0x50000 0x1FC0000>;
 		};
 	};
 };
