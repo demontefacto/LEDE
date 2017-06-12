@@ -1,4 +1,10 @@
 # Put your custom commands here that should be executed once
 # the system init finished. By default this file does nothing.
 
+for service in network netserver dhcpcd dnsmasq snmpd quagga dbus keepalived bird4 bird6 \
+	pmacctd nfacctd vrrpd ipsec bootcount setserial enablemodem usbmode bootcount ; do
+	/etc/init.d/$service stop
+	/etc/init.d/$service disable
+done
+
 exit 0
