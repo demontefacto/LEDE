@@ -9,12 +9,31 @@ if [ -f /etc/firstboot ] ; then
 		/etc/init.d/$service disable
 	done
 	
-	for config in `ls /etc/config` ; do
-		rm -r config
+	cd /etc/config
+	for config in `ls /etc/config |grep -v system` ; do
+		rm -r $config
 	done
 
 	for backup in /etc/bird4.conf /etc/rc.local /etc/bird6.conf /etc/rc.local /etc/rc.qos /etc/rc.qos.tunel ; do
 		ln -s $backup $BAK_DIR
+	done
+	#moduly ke smazani
+	mkdir -p /etc/modules-bak
+
+	dir_bak="/etc/modules-bak"
+	dir_urgent="/etc/modules-boot.d"
+	dir_module="/etc/modules.d"
+	echo "$dir_bak";
+	echo "$dir_urgent";
+	echo "$dir_module";
+
+
+	#vsechny moduly do moduloveho kose
+	for file in $dir_module/* ; do
+		filestr=`basename $file`
+		if [ `ls $dir_urgent | grep -c $filestr` -eq 0 ]; then
+			mv $dir_module/$filestr $dir_bak
+		fi
 	done
 
 	rm -r /etc/firstboot
