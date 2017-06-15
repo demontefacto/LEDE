@@ -35,6 +35,4 @@ if [ -f /etc/firstboot ] ; then
 			mv $dir_module/$filestr $dir_bak
 		fi
 	done
-
-	rm -r /etc/firstboot
 fi
