@@ -2,6 +2,8 @@
 . /lib/ramips.sh
 case $(ramips_board_name) in
 zbt-we826)
+#ulozeni prvni MAC adresy
+	mac_origin=`ethtool -P eth0 |awk -F ' ' '{print $3}' |tr -d ':'`
         #prejmenovani
         ip link set eth0 down
         ip link set eth0 name sw1
@@ -15,26 +17,45 @@ zbt-we826)
         swconfig dev switch0 vlan 1 set ports "3 4 6t"
         ip link set sw1.1 name sw0
         ip link set sw0 txqueuelen 1000
+#dopocitani MAC Adresy pro sw0
+	mac_count=`echo $(( 0x$mac_origin + 1 ))`
+	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
+	ip link set sw0 address $mac
 #eth2---------------------------------------------
         vconfig add sw1 2
         swconfig dev switch0 port 2 set pvid 2
         swconfig dev switch0 vlan 2 set ports "2 6t"
         ip link set sw1.2 name eth2
         ip link set eth2 txqueuelen 1000
+#dopocitani MAC Adresy pro eth2
+	mac_count=`echo $(( 0x$mac_origin + 2 ))`
+	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
+	ip link set eth2 address $mac
 #eth3---------------------------------------------
         vconfig add sw1 3
         swconfig dev switch0 port 1 set pvid 3
         swconfig dev switch0 vlan 3 set ports "1 6t"
         ip link set sw1.3 name eth3
         ip link set eth3 txqueuelen 1000
+#dopocitani MAC Adresy pro eth3
+	mac_count=`echo $(( 0x$mac_origin + 3 ))`
+	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
+	ip link set eth3 address $mac
 #eth4---------------------------------------------
         vconfig add sw1 4
         swconfig dev switch0 port 0 set pvid 4
         swconfig dev switch0 vlan 4 set ports "0 6t"
         ip link set sw1.4 name eth4
         ip link set eth4 txqueuelen 1000
+#dopocitani MAC Adresy pro eth4
+	mac_count=`echo $(( 0x$mac_origin + 4 ))`
+	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
+	ip link set eth4 address $mac
 
         swconfig dev switch0 set apply
         ip link set dev sw1 up
         ;;
 esac
+unset mac_origin
+unset mac_count
+unset mac
