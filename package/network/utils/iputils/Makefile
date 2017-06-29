@@ -120,11 +120,6 @@ define Package/iputils-ping/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ping $(1)/usr/bin/
 endef
 
-define Package/iputils-ping6/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ping6 $(1)/usr/bin/
-endef
-
 define Package/iputils-tftpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tftpd $(1)/usr/sbin/
@@ -133,11 +128,6 @@ endef
 define Package/iputils-tracepath/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tracepath $(1)/usr/bin/
-endef
-
-define Package/iputils-tracepath6/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tracepath6 $(1)/usr/bin/
 endef
 
 define Package/iputils-traceroute6/install
