@@ -14,7 +14,7 @@ if [ -f /etc/firstboot ] ; then
 		rm -r $config
 	done
 
-	for backup in /etc/bird4.conf /etc/rc.local /etc/bird6.conf /etc/rc.local /etc/rc.qos /etc/rc.qos.tunel ; do
+	for backup in /etc/bird4.conf /etc/rc.local /etc/bird6.conf /etc/rc.rename /etc/rc.qos /etc/rc.qos.tunel ; do
 		ln -s $backup $BAK_DIR
 	done
 	#moduly ke smazani

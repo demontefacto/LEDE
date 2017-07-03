@@ -10,42 +10,51 @@ zbt-we826)
         #sw1 je cely switch
         #rozdeleni switche
         swconfig dev switch0 set enable_vlan 1
-#sw0=eth0+eth1------------------------------------
-        vconfig add sw1 1
-        swconfig dev switch0 port 4 set pvid 1
-        swconfig dev switch0 port 3 set pvid 1
-        swconfig dev switch0 vlan 1 set ports "3 4 6t"
-        ip link set sw1.1 name sw0
-        ip link set sw0 txqueuelen 1000
+#eth0------------------------------------
+	vconfig add sw1 1
+	swconfig dev switch0 port 4 set pvid 1
+	swconfig dev switch0 vlan 2 set ports "3 6t"
+	ip link set sw1.1 name eth0
+	ip link set eth0 txqueuelen 1000
 #dopocitani MAC Adresy pro sw0
 	mac_count=`echo $(( 0x$mac_origin + 1 ))`
 	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
 	ip link set sw0 address $mac
-#eth2---------------------------------------------
+#eth1------------------------------------
         vconfig add sw1 2
-        swconfig dev switch0 port 2 set pvid 2
-        swconfig dev switch0 vlan 2 set ports "2 6t"
-        ip link set sw1.2 name eth2
+        swconfig dev switch0 port 3 set pvid 2
+        swconfig dev switch0 vlan 2 set ports "3 6t"
+        ip link set sw1.1 name sw0
+        ip link set sw0 txqueuelen 1000
+#dopocitani MAC Adresy pro eth1
+	mac_count=`echo $(( 0x$mac_origin + 1 ))`
+	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
+	ip link set eth1 address $mac
+#eth2---------------------------------------------
+        vconfig add sw1 3
+        swconfig dev switch0 port 2 set pvid 3
+        swconfig dev switch0 vlan 3 set ports "2 6t"
+        ip link set sw1.3 name eth2
         ip link set eth2 txqueuelen 1000
 #dopocitani MAC Adresy pro eth2
 	mac_count=`echo $(( 0x$mac_origin + 2 ))`
 	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
 	ip link set eth2 address $mac
 #eth3---------------------------------------------
-        vconfig add sw1 3
-        swconfig dev switch0 port 1 set pvid 3
-        swconfig dev switch0 vlan 3 set ports "1 6t"
-        ip link set sw1.3 name eth3
+        vconfig add sw1 4
+        swconfig dev switch0 port 1 set pvid 4
+        swconfig dev switch0 vlan 4 set ports "1 6t"
+        ip link set sw1.4 name eth3
         ip link set eth3 txqueuelen 1000
 #dopocitani MAC Adresy pro eth3
 	mac_count=`echo $(( 0x$mac_origin + 3 ))`
 	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
 	ip link set eth3 address $mac
 #eth4---------------------------------------------
-        vconfig add sw1 4
-        swconfig dev switch0 port 0 set pvid 4
-        swconfig dev switch0 vlan 4 set ports "0 6t"
-        ip link set sw1.4 name eth4
+        vconfig add sw1 5
+        swconfig dev switch0 port 0 set pvid 5
+        swconfig dev switch0 vlan 5 set ports "0 6t"
+        ip link set sw1.5 name eth4
         ip link set eth4 txqueuelen 1000
 #dopocitani MAC Adresy pro eth4
 	mac_count=`echo $(( 0x$mac_origin + 4 ))`
