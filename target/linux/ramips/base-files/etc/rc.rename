@@ -13,19 +13,19 @@ zbt-we826)
 #eth0------------------------------------
 	vconfig add sw1 1
 	swconfig dev switch0 port 4 set pvid 1
-	swconfig dev switch0 vlan 2 set ports "3 6t"
+	swconfig dev switch0 vlan 2 set ports "4 6t"
 	ip link set sw1.1 name eth0
 	ip link set eth0 txqueuelen 1000
-#dopocitani MAC Adresy pro sw0
+#dopocitani MAC Adresy pro eth0
 	mac_count=`echo $(( 0x$mac_origin + 1 ))`
 	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
-	ip link set sw0 address $mac
+	ip link set eth0 address $mac
 #eth1------------------------------------
         vconfig add sw1 2
         swconfig dev switch0 port 3 set pvid 2
         swconfig dev switch0 vlan 2 set ports "3 6t"
-        ip link set sw1.1 name sw0
-        ip link set sw0 txqueuelen 1000
+        ip link set sw1.2 name eth1
+        ip link set eth1 txqueuelen 1000
 #dopocitani MAC Adresy pro eth1
 	mac_count=`echo $(( 0x$mac_origin + 1 ))`
 	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
