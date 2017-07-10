@@ -13,7 +13,7 @@ zbt-we826)
 #eth0------------------------------------
 	vconfig add sw1 1
 	swconfig dev switch0 port 4 set pvid 1
-	swconfig dev switch0 vlan 2 set ports "4 6t"
+	swconfig dev switch0 vlan 1 set ports "4 6t"
 	ip link set sw1.1 name eth0
 	ip link set eth0 txqueuelen 1000
 #dopocitani MAC Adresy pro eth0
