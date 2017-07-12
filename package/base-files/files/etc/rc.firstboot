@@ -4,7 +4,7 @@ if [ -f /etc/firstboot ] ; then
 	mkdir -p $BAK_DIR
 
 	for service in network netserver dhcpcd dnsmasq snmpd quagga dbus keepalived bird4 bird6 \
-		xinetd pmacctd nfacctd vrrpd ipsec bootcount setserial enablemodem usbmode bootcount ; do
+		xinetd pmacctd nfacctd vrrpd ipsec bootcount setserial enablemodem usbmode bootcount uhttpd 3ginfo; do
 		/etc/init.d/$service stop
 		/etc/init.d/$service disable
 	done
