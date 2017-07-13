@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ -f /etc/firstboot ] ; then
 
 	BAK_DIR="/backup"
@@ -14,7 +15,8 @@ if [ -f /etc/firstboot ] ; then
 		rm -r $config
 	done
 
-	for backup in /etc/bird4.conf /etc/rc.local /etc/bird6.conf /etc/rc.rename /etc/rc.qos /etc/rc.qos.tunel ; do
+	for backup in /etc/bird4.conf /etc/rc.local /etc/bird6.conf /etc/rc.rename /etc/rc.qos /etc/rc.qos.tunel \
+		/etc/hostapd.conf ; do
 		ln -s $backup $BAK_DIR
 	done
 	#moduly ke smazani
@@ -23,10 +25,6 @@ if [ -f /etc/firstboot ] ; then
 	dir_bak="/etc/modules-bak"
 	dir_urgent="/etc/modules-boot.d"
 	dir_module="/etc/modules.d"
-	echo "$dir_bak";
-	echo "$dir_urgent";
-	echo "$dir_module";
-
 
 	#vsechny moduly do moduloveho kose
 	for file in $dir_module/* ; do

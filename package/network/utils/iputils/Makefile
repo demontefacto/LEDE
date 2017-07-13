@@ -118,6 +118,7 @@ endef
 define Package/iputils-ping/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ping $(1)/usr/bin/
+	chmod u+s $(1)/usr/bin/ping
 endef
 
 define Package/iputils-tftpd/install

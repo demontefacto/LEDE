@@ -51,3 +51,13 @@ service() {
 	}
 	/etc/init.d/$@
 }
+
+if [ -e /etc/sn ] ; then
+	echo -n ''
+else
+	while [ "$SN" = "" ] ; do
+		echo -n "Zadej S/N: "
+		read SN
+	done
+	echo $SN > /etc/sn
+fi
