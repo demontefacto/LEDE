@@ -356,6 +356,9 @@ endef
 define Package/hostapd/install
 	$(call Install/hostapd,$(1))
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/hostapd/hostapd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) ./files/hostapd-example.conf
+	$(INSTALL_CONF) ./files/hostapd.conf
 endef
 Package/hostapd-mini/install = $(Package/hostapd/install)
 
