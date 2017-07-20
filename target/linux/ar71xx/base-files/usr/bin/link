@@ -1,0 +1,17 @@
+#!/bin/bash
+. /lib/ar71xx.sh
+case $(ar71xx_board_name) in
+rb-750)
+	port0=$(mii-tool eth0)
+	port1=$(swconfig dev sw0 port 1 get link)
+	port2=$(swconfig dev sw0 port 2 get link)
+	port3=$(swconfig dev sw0 port 3 get link)
+	port4=$(swconfig dev sw0 port 4 get link)
+
+	echo $port0
+	echo $port4 | sed 's/port:4/eth1/' |sed 's/link: port:4//'
+	echo $port3 | sed 's/port:3/eth2/' |sed 's/link: port:3//'
+	echo $port2 | sed 's/port:2/eth3/' |sed 's/link: port:2//'
+	echo $port1 | sed 's/port:1/eth4/' |sed 's/link: port:1//'
+        ;;
+esac
