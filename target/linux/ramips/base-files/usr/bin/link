@@ -1,0 +1,18 @@
+#!/bin/bash
+        . /lib/ramips.sh 
+
+case $(ramips_board_name) in
+zbt-we826)
+        port0=$(swconfig dev switch0 port 0 get link)
+        port1=$(swconfig dev switch0 port 1 get link)
+        port2=$(swconfig dev switch0 port 2 get link)
+        port3=$(swconfig dev switch0 port 3 get link)
+        port4=$(swconfig dev switch0 port 4 get link)
+
+        echo $port4 | sed 's/port:4/eth0/' |sed 's/link: port:4//'
+        echo $port3 | sed 's/port:3/eth1/' |sed 's/link: port:3//'
+        echo $port2 | sed 's/port:2/eth2/' |sed 's/link: port:2//'
+        echo $port1 | sed 's/port:1/eth3/' |sed 's/link: port:1//'
+        echo $port0 | sed 's/port:0/eth4/' |sed 's/link: port:0//'
+        ;;
+esac
