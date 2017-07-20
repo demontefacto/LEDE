@@ -44,4 +44,4 @@
 -               if (fwd_mask & BR_GROUPFWD_RESTRICTED)
 -                       return -EINVAL;
                 br->group_fwd_mask = fwd_mask;
-        }
+	}
