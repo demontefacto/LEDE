@@ -14,22 +14,18 @@ set_classless_routes() {
 }
 
 setup_interface() {
-	echo "udhcpc: ifconfig $interface $ip netmask ${subnet:-255.255.255.0} broadcast ${broadcast:-+}"
-	ifconfig $interface $ip netmask ${subnet:-255.255.255.0} broadcast ${broadcast:-+}
+	echo "udhcpc: ifconfig $interface $ip netmask ${subnet:-255.255.255.0}"
+	ifconfig $interface $ip netmask ${subnet:-255.255.255.0}
 
 	[ -n "$router" ] && [ "$router" != "0.0.0.0" ] && [ "$router" != "255.255.255.255" ] && {
-		echo "udhcpc: setting default routers: $router"
+		echo "udhcpc: setting default routers: $router with metric 100"
 
 		local valid_gw=""
 		for i in $router ; do
-			route add default gw $i dev $interface
+			route add default gw $i dev $interface metric 100
 			valid_gw="${valid_gw:+$valid_gw|}$i"
 		done
 		
-		eval $(route -n | awk '
-			/^0.0.0.0\W{9}('$valid_gw')\W/ {next}
-			/^0.0.0.0/ {print "route del -net "$1" gw "$2";"}
-		')
 	}
 
 	# CIDR STATIC ROUTES (rfc3442)
