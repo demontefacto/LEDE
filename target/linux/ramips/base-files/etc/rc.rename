@@ -27,7 +27,7 @@ zbt-we826)
         ip link set sw1.2 name eth1
         ip link set eth1 txqueuelen 1000
 #dopocitani MAC Adresy pro eth1
-	mac_count=`echo $(( 0x$mac_origin + 1 ))`
+	mac_count=`echo $(( 0x$mac_origin + 2 ))`
 	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
 	ip link set eth1 address $mac
 #eth2---------------------------------------------
@@ -37,7 +37,7 @@ zbt-we826)
         ip link set sw1.3 name eth2
         ip link set eth2 txqueuelen 1000
 #dopocitani MAC Adresy pro eth2
-	mac_count=`echo $(( 0x$mac_origin + 2 ))`
+	mac_count=`echo $(( 0x$mac_origin + 3 ))`
 	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
 	ip link set eth2 address $mac
 #eth3---------------------------------------------
@@ -47,7 +47,7 @@ zbt-we826)
         ip link set sw1.4 name eth3
         ip link set eth3 txqueuelen 1000
 #dopocitani MAC Adresy pro eth3
-	mac_count=`echo $(( 0x$mac_origin + 3 ))`
+	mac_count=`echo $(( 0x$mac_origin + 4 ))`
 	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
 	ip link set eth3 address $mac
 #eth4---------------------------------------------
@@ -57,7 +57,7 @@ zbt-we826)
         ip link set sw1.5 name eth4
         ip link set eth4 txqueuelen 1000
 #dopocitani MAC Adresy pro eth4
-	mac_count=`echo $(( 0x$mac_origin + 4 ))`
+	mac_count=`echo $(( 0x$mac_origin + 5 ))`
 	mac=`printf %X $mac_count |sed 's/..\B/&:/g'`
 	ip link set eth4 address $mac
 
