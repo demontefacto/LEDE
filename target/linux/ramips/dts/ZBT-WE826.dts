@@ -16,11 +16,11 @@
 		compatible = "gpio-leds";
 		power {
 			label = "zbt-we826:green:power";
-			gpios = <&gpio1 14 0>;
+			gpios = <&gpio0 9 1>;
 		};
 		usb {
 			label = "zbt-we826:green:usb";
-			gpios = <&gpio1 15 0>;
+			gpios = <&gpio0 11 1>;
 		};
 		air {
 			label = "zbt-we826:green:wifi";
