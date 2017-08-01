@@ -5,7 +5,7 @@ if [ -f /etc/firstboot ] ; then
 	mkdir -p $BAK_DIR
 
 	for service in network netserver dhcpcd dnsmasq snmpd quagga dbus keepalived bird4 bird6 \
-		xinetd pmacctd nfacctd vrrpd ipsec bootcount setserial enablemodem usbmode bootcount uhttpd 3ginfo; do
+		xinetd pmacctd nfacctd vrrpd ipsec bootcount setserial enablemodem usbmode bootcount uhttpd 3ginfo dhcpd; do
 		/etc/init.d/$service stop
 		/etc/init.d/$service disable
 	done
@@ -15,7 +15,7 @@ if [ -f /etc/firstboot ] ; then
 		rm -r $config
 	done
 
-	for backup in /etc/bird4.conf /etc/rc.local /etc/bird6.conf /etc/rc.rename /etc/rc.qos /etc/rc.qos.tunel \
+	for backup in /etc/bird4.conf /etc/rc.local /etc/bird6.conf /etc/rc.rename /etc/rc.qos /etc/rc.qos.tunel /etc/dhcpd.conf \
 		/etc/hostapd.conf ; do
 		ln -s $backup $BAK_DIR
 	done
