@@ -404,7 +404,7 @@ TARGET_DEVICES += zbt-wa05
 
 define Device/zbt-we826
   DTS := ZBT-WE826
-  IMAGE_SIZE := $(ralink_default_fw_size_16M)
+  IMAGE_SIZE := $(ralink_default_fw_size_32M)
   DEVICE_TITLE := Zbtlink ZBT-WE826
   DEVICE_PACKAGES := kmod-usb2 kmod-usb-ohci kmod-mt76 kmod-sdhci-mt7620 
 endef
