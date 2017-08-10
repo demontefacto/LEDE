@@ -4,8 +4,30 @@ if [ -f /etc/firstboot ] ; then
 	BAK_DIR="/backup"
 	mkdir -p $BAK_DIR
 
-	for service in network netserver dhcpcd dnsmasq snmpd quagga dbus keepalived bird4 bird6 \
-		xinetd pmacctd nfacctd vrrpd ipsec bootcount setserial enablemodem usbmode bootcount uhttpd 3ginfo dhcpd; do
+	for service in 3ginfo \
+			 bird4 \
+			 bird6 \
+			 bootcount \
+			 dbus \
+			 dhcpcd \
+			 dhcpd \
+			 dnsmasq \
+			 enablemodem \
+			 ipsec \
+			 keepalived \
+			 pmacctd \
+			 netserver \
+			 network \
+			 nfacctd \
+			 quagga \
+			 snmpd \
+			 setserial \
+			 sshd \
+			 uhttpd \
+			 usbmode \
+			 vtund \
+			 vrrpd \
+			 xinetd ; do
 		/etc/init.d/$service stop
 		/etc/init.d/$service disable
 	done
@@ -15,8 +37,14 @@ if [ -f /etc/firstboot ] ; then
 		rm -r $config
 	done
 
-	for backup in /etc/bird4.conf /etc/rc.local /etc/bird6.conf /etc/rc.rename /etc/rc.qos /etc/rc.qos.tunel /etc/dhcpd.conf \
-		/etc/hostapd.conf ; do
+	for backup in /etc/bird4.conf \
+			/etc/bird6.conf \
+			/etc/dhcpd.conf \
+			/etc/hostapd.conf \
+			/etc/rc.local \
+			/etc/rc.rename \
+			/etc/rc.qos \
+			/etc/rc.qos.tunel ; do
 		ln -s $backup $BAK_DIR
 	done
 	#moduly ke smazani
