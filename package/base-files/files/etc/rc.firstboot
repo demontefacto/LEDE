@@ -40,11 +40,20 @@ if [ -f /etc/firstboot ] ; then
 	for backup in /etc/bird4.conf \
 			/etc/bird6.conf \
 			/etc/dhcpd.conf \
+			/etc/dnsmasq.conf \
 			/etc/hostapd.conf \
+			/etc/openvpn/ \
 			/etc/rc.local \
+			/etc/rc.firewall \
 			/etc/rc.rename \
 			/etc/rc.qos \
-			/etc/rc.qos.tunel ; do
+			/etc/rc.qos.tunel \
+			/etc/rc.wifi \
+			/etc/rc.lte \
+			/etc/vtund.conf \
+			/etc/xinetd.d/ \
+			/etc/zaloha/ ; do
+		echo $backup >> /etc/sysupgrade.conf
 		ln -s $backup $BAK_DIR
 	done
 	#moduly ke smazani
@@ -53,7 +62,6 @@ if [ -f /etc/firstboot ] ; then
 	dir_bak="/etc/modules-bak"
 	dir_urgent="/etc/modules-boot.d"
 	dir_module="/etc/modules.d"
-
 	#vsechny moduly do moduloveho kose
 	for file in $dir_module/* ; do
 		filestr=`basename $file`
@@ -61,4 +69,6 @@ if [ -f /etc/firstboot ] ; then
 			mv $dir_module/$filestr $dir_bak
 		fi
 	done
+	#potrebne adresare
+	mkdir -p /etc/zaloha/
 fi
