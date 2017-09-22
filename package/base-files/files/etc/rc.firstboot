@@ -53,7 +53,9 @@ if [ -f /etc/firstboot ] ; then
 			/etc/vtund.conf \
 			/etc/xinetd.d/ \
 			/etc/zaloha/ ; do
-		echo $backup >> /etc/sysupgrade.conf
+		if ! grep $backup /etc/sysupgrade.conf; then
+			echo $backup >> /etc/sysupgrade.conf
+		fi
 		ln -s $backup $BAK_DIR
 	done
 	#moduly ke smazani
@@ -71,4 +73,5 @@ if [ -f /etc/firstboot ] ; then
 	done
 	#potrebne adresare
 	mkdir -p /etc/zaloha/
+	mkdir -m 0700 -p /var/empty
 fi
