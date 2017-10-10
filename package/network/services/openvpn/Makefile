@@ -65,10 +65,10 @@ CONFIG_OPENVPN_NOSSL:=y
 endif
 
 CONFIGURE_VARS += \
-	IFCONFIG=/sbin/ifconfig \
+	IFCONFIG=/usr/sbin/ifconfig \
 	ROUTE=/sbin/route \
-	IPROUTE=/sbin/ip \
-	NETSTAT=/sbin/netstat
+	IPROUTE=/usr/sbin/ip \
+	NETSTAT=/usr/bin/netstat
 
 TARGET_CFLAGS += -ffunction-sections -fdata-sections
 TARGET_LDFLAGS += -Wl,--gc-sections
