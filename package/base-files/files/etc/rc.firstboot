@@ -74,4 +74,5 @@ if [ -f /etc/firstboot ] ; then
 	#potrebne adresare
 	mkdir -p /etc/zaloha/
 	mkdir -m 0700 -p /var/empty
+	mkdir -p /var/lock/vtund
 fi
