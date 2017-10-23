@@ -15,6 +15,7 @@ if [ -f /etc/firstboot ] ; then
 			 enablemodem \
 			 ipsec \
 			 keepalived \
+			 openvpn \
 			 pmacctd \
 			 netserver \
 			 network \
@@ -27,7 +28,8 @@ if [ -f /etc/firstboot ] ; then
 			 usbmode \
 			 vtund \
 			 vrrpd \
-			 xinetd ; do
+			 xinetd \
+			 zaloha ; do
 		/etc/init.d/$service stop
 		/etc/init.d/$service disable
 	done
