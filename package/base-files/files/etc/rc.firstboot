@@ -24,6 +24,8 @@ if [ -f /etc/firstboot ] ; then
 			 snmpd \
 			 setserial \
 			 sshd \
+			 sysfixtime \
+			 sysntpd \
 			 uhttpd \
 			 usbmode \
 			 vtund \
