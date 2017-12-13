@@ -6,13 +6,11 @@ boot() {
 	mount_root done
 	rm -f /sysupgrade.tgz
 
-#Moved to boot
-#	# process user commands
-#	[ -f /etc/rc.local ] && {
-#		sh /etc/rc.local
-#	}
-
 	# set leds to normal state
 	. /etc/diag.sh
 	set_state done
+	
+	#zvlastni skripty, ktere se maji spoustet az po kompletnim startu routeru
+	#provisioning atd.
+	[ -f /etc/lastboot ] && sh /etc/lastboot
 }
