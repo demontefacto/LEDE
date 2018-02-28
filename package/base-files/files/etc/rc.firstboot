@@ -41,11 +41,12 @@ if [ -f /etc/firstboot ] ; then
 		rm -r $config
 	done
 
-	for backup in /etc/bird4.conf \
+	for backup in 	/etc/bird4.conf \
 			/etc/bird6.conf \
 			/etc/dhcpd.conf \
 			/etc/dnsmasq.conf \
 			/etc/hostapd.conf \
+			/etc/keepalived/keepalived.conf \
 			/etc/openvpn/ \
 			/etc/rc.local \
 			/etc/rc.firewall \
@@ -54,6 +55,7 @@ if [ -f /etc/firstboot ] ; then
 			/etc/rc.qos.tunel \
 			/etc/rc.wifi \
 			/etc/rc.lte \
+			/etc/rc.vtund \
 			/etc/vtund.conf \
 			/etc/xinetd.d/ \
 			/etc/zaloha/ ; do
