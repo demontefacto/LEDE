@@ -7,9 +7,5 @@
 };
 
 &firmware {
-	reg = <0x50000 0xfb0000>;
-};
-
-&status_led {
-	label = "zbt-wg3526:green:status";
+	reg = <0x50000 0x1fb0000>;
 };
