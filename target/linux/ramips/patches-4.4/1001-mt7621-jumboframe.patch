@@ -1,0 +1,132 @@
+--- a/drivers/net/ethernet/mediatek/gsw_mt7620.h
++++ b/drivers/net/ethernet/mediatek/gsw_mt7620.h
+@@ -47,6 +47,13 @@
+ #define GSW_REG_ISR		0x700c
+ #define GSW_REG_GPC1		0x7014
+ 
++#define GSW_REG_MAC_P0_MCR	0x100
++#define GSW_REG_MAC_P1_MCR	0x200
++
++// Global MAC control register
++#define GSW_REG_GMACCR		0x30E0
++
++
+ #define SYSC_REG_CHIP_REV_ID	0x0c
+ #define SYSC_REG_CFG1		0x14
+ #define RST_CTRL_MCM		BIT(2)
+--- a/drivers/net/ethernet/mediatek/gsw_mt7621.c
++++ b/drivers/net/ethernet/mediatek/gsw_mt7621.c
+@@ -99,17 +99,20 @@ static void mt7621_hw_init(struct mt7620
+ 	usleep_range(10, 20);
+ 
+ 	if ((rt_sysc_r32(SYSC_REG_CHIP_REV_ID) & 0xFFFF) == 0x0101) {
+-		/* (GE1, Force 1000M/FD, FC ON, MAX_RX_LENGTH 1536) */
+-		mtk_switch_w32(gsw, 0x2105e30b, 0x100);
++		/* (GE1, Force 1000M/FD, FC ON, MAX_RX_LENGTH 2k) */
++		mtk_switch_w32(gsw, 0x2305e30b, GSW_REG_MAC_P0_MCR);
+ 		mt7530_mdio_w32(gsw, 0x3600, 0x5e30b);
+ 	} else {
+-		/* (GE1, Force 1000M/FD, FC ON, MAX_RX_LENGTH 1536) */
+-		mtk_switch_w32(gsw, 0x2105e33b, 0x100);
++		/* (GE1, Force 1000M/FD, FC ON, MAX_RX_LENGTH 2k) */
++		mtk_switch_w32(gsw, 0x2305e33b, GSW_REG_MAC_P0_MCR);
+ 		mt7530_mdio_w32(gsw, 0x3600, 0x5e33b);
+ 	}
+ 
+ 	/* (GE2, Link down) */
+-	mtk_switch_w32(gsw, 0x8000, 0x200);
++	mtk_switch_w32(gsw, 0x8000, GSW_REG_MAC_P1_MCR);
++	
++	/* Set switch max RX frame length to 2k */
++	mt7530_mdio_w32(gsw, GSW_REG_GMACCR, 0x3F0B);
+ 
+ 	/* Enable Port 6, P5 as GMAC5, P5 disable */
+ 	val = mt7530_mdio_r32(gsw, 0x7804);
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -37,7 +37,7 @@
+ #include "mdio.h"
+ #include "ethtool.h"
+ 
+-#define	MAX_RX_LENGTH		1536
++#define	MAX_RX_LENGTH		2048
+ #define FE_RX_ETH_HLEN		(VLAN_ETH_HLEN + VLAN_HLEN + ETH_FCS_LEN)
+ #define FE_RX_HLEN		(NET_SKB_PAD + FE_RX_ETH_HLEN + NET_IP_ALIGN)
+ #define DMA_DUMMY_DESC		0xffffffff
+@@ -1341,11 +1341,29 @@ static int fe_do_ioctl(struct net_device
+ 	return -EOPNOTSUPP;
+ }
+ 
++static int fe_set_mtu(struct fe_priv* priv, int new_mtu)
++{
++	int frag_size = fe_max_frag_size(new_mtu);
++	u32 fwd_cfg;
++
++	fe_stop(priv->netdev);
++	fwd_cfg = fe_r32(FE_GDMA1_FWD_CFG);
++	if (new_mtu <= ETH_DATA_LEN) {
++		fwd_cfg &= ~FE_GDM1_JMB_EN;
++	} else {
++		fwd_cfg &= ~(FE_GDM1_JMB_LEN_MASK << FE_GDM1_JMB_LEN_SHIFT);
++		fwd_cfg |= (DIV_ROUND_UP(frag_size, 1024) <<
++		FE_GDM1_JMB_LEN_SHIFT) | FE_GDM1_JMB_EN;
++	}
++	fe_w32(fwd_cfg, FE_GDMA1_FWD_CFG);
++
++	return fe_open(priv->netdev);
++}
++
+ static int fe_change_mtu(struct net_device *dev, int new_mtu)
+ {
+ 	struct fe_priv *priv = netdev_priv(dev);
+ 	int frag_size, old_mtu;
+-	u32 fwd_cfg;
+ 
+ 	if (!(priv->flags & FE_FLAG_JUMBO_FRAME))
+ 		return eth_change_mtu(dev, new_mtu);
+@@ -1371,19 +1389,11 @@ static int fe_change_mtu(struct net_devi
+ 
+ 	if (!netif_running(dev))
+ 		return 0;
+-
+-	fe_stop(dev);
+-	fwd_cfg = fe_r32(FE_GDMA1_FWD_CFG);
+-	if (new_mtu <= ETH_DATA_LEN) {
+-		fwd_cfg &= ~FE_GDM1_JMB_EN;
+-	} else {
+-		fwd_cfg &= ~(FE_GDM1_JMB_LEN_MASK << FE_GDM1_JMB_LEN_SHIFT);
+-		fwd_cfg |= (DIV_ROUND_UP(frag_size, 1024) <<
+-				FE_GDM1_JMB_LEN_SHIFT) | FE_GDM1_JMB_EN;
+-	}
+-	fe_w32(fwd_cfg, FE_GDMA1_FWD_CFG);
+-
+-	return fe_open(dev);
++	
++	if (priv->soc->set_mtu)
++		return priv->soc->set_mtu(priv, new_mtu);
++	
++	return fe_set_mtu(priv, new_mtu);
+ }
+ 
+ static const struct net_device_ops fe_netdev_ops = {
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -381,6 +381,7 @@ struct fe_soc_data {
+ 	void (*reset_fe)(void);
+ 	void (*set_mac)(struct fe_priv *priv, unsigned char *mac);
+ 	int (*fwd_config)(struct fe_priv *priv);
++	int (*set_mtu)(struct fe_priv *priv, int new_mtu);
+ 	void (*tx_dma)(struct fe_tx_dma *txd);
+ 	int (*switch_init)(struct fe_priv *priv);
+ 	int (*switch_config)(struct fe_priv *priv);
+--- a/drivers/net/ethernet/mediatek/soc_mt7621.c
++++ b/drivers/net/ethernet/mediatek/soc_mt7621.c
+@@ -139,7 +139,7 @@ static void mt7621_init_data(struct fe_s
+ 
+ 	priv->flags = FE_FLAG_PADDING_64B | FE_FLAG_RX_2B_OFFSET |
+ 		FE_FLAG_RX_SG_DMA | FE_FLAG_NAPI_WEIGHT |
+-		FE_FLAG_HAS_SWITCH;
++		FE_FLAG_HAS_SWITCH | FE_FLAG_JUMBO_FRAME;
+ 
+ 	netdev->hw_features = NETIF_F_IP_CSUM | NETIF_F_RXCSUM |
+ 		NETIF_F_HW_VLAN_CTAG_TX | NETIF_F_SG | NETIF_F_TSO |
