@@ -10,7 +10,10 @@ fgrep -sq '/ overlay ro,' /proc/mounts && {
 export PATH="%PATH%"
 export HOME=$(grep -e "^${USER:-root}:" /etc/passwd | cut -d ":" -f 6)
 export HOME=${HOME:-/root}
+export EDITOR=joe
 export PS1='\h:\w\$ '
+alias init="echo Tohle asi opravdu nechces"
+alias initq="echo Takhle to tu nefunguje"
 
 [ "$TERM" = "xterm" ] && export PS1='\[\e]0;\u@\h: \w\a\]'$PS1
 
