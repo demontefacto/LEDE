@@ -12,8 +12,12 @@ zbt-we826|zbt-wg3526)
         ip link set eth0 down
         ip link set eth0 name sw1
         #sw1 je cely switch
+        #Toto je platne pouze pro zbt-wg3526
         if [[ $(ramips_board_name) == "zbt-wg3526" ]]  ; then
+        	#aby slo pak na eth0-eth4 nastavit vetsi MTU (MAX 2000)
         	ip link set sw1 mtu 2000
+        	#nepouzivej CPU0, ale 2
+        	echo c > /proc/irq/10/smp_affinity
         fi
         #rozdeleni switche
         swconfig dev switch0 set enable_vlan 1
