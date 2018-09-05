@@ -33,6 +33,8 @@ system_config() {
 
 	# apply timezone to kernel
 	date -k
+	#load current clock from file
+	/usr/bin/fake-hwclock load
 }
 
 reload_service() {
