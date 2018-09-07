@@ -46,6 +46,8 @@ if [ -f /etc/firstboot ] ; then
 			/etc/dhcpd.conf \
 			/etc/dnsmasq.conf \
 			/etc/hostapd.conf \
+			/etc/hostapd2g.conf \
+			/etc/hostapd5g.conf \
 			/etc/keepalived/keepalived.conf \
 			/etc/openvpn/ \
 			/etc/rc.local \
