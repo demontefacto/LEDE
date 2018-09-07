@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hostapd
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=http://w1.fi/hostap.git
 PKG_SOURCE_PROTO:=git
@@ -359,6 +359,8 @@ define Package/hostapd/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_BIN) ./files/hostapd-example.conf $(1)/etc/
 	$(INSTALL_BIN) ./files/hostapd.conf $(1)/etc/
+	$(INSTALL_BIN) ./files/hostapd2g.conf $(1)/etc/
+	$(INSTALL_BIN) ./files/hostapd5g.conf $(1)/etc/
 endef
 Package/hostapd-mini/install = $(Package/hostapd/install)
 
