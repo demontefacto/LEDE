@@ -16,8 +16,10 @@ zbt-we826|zbt-wg3526)
         if [[ $(ramips_board_name) == "zbt-wg3526" ]]  ; then
         	#aby slo pak na eth0-eth4 nastavit vetsi MTU (MAX 2000)
         	ip link set sw1 mtu 2000
-        	#nepouzivej CPU0, ale 2
-        	echo c > /proc/irq/10/smp_affinity
+		#nepouzivej CPU0, ale 1
+		echo 1 > /proc/irq/10/smp_affinity
+		echo c > /sys/class/net/sw1/queues/tx-0/xps_cpus
+		echo c > /sys/class/net/sw1/queues/rx-0/rps_cpus
         fi
         #rozdeleni switche
         swconfig dev switch0 set enable_vlan 1
