@@ -60,7 +60,8 @@ if [ -f /etc/firstboot ] ; then
 			/etc/rc.vtund \
 			/etc/vtund.conf \
 			/etc/xinetd.d/ \
-			/etc/zaloha/ ; do
+			/etc/zaloha/ \
+			/etc/wireguard/ ; do
 		if ! grep $backup /etc/sysupgrade.conf; then
 			echo $backup >> /etc/sysupgrade.conf
 		fi
@@ -83,4 +84,8 @@ if [ -f /etc/firstboot ] ; then
 	mkdir -p /etc/zaloha/
 	mkdir -m 0700 -p /var/empty
 	mkdir -p /var/lock/vtund
+	mkdir -p /etc/wireguard
+	if [ -f /etc/wg-gen-key ] ; then
+		sh /etc/wg-gen-key && rm /etc/wg-gen-key
+	fi
 fi
